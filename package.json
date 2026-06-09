@@ -1,0 +1,22 @@
+{
+  "name": "demoqa",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:single": "npx playwright test tests/TextBoxTest.spec.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1",
+    "allure-playwright": "^3.9.0"
+  },
+  "dependencies": {
+    "save-dev": "^0.0.1-security"
+  }
+}
