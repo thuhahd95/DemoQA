@@ -1,64 +1,109 @@
-import { expect, test} from '@playwright/test';
-import { PracticeFormPage } from '../pages/PracticeFormPage.js';
-import { ThanksForSubmitPage } from '../pages/ThanksForSubmitPage.js';
-test.describe('Practice Form Test', () => {
-    let practiceFormPage: PracticeFormPage;
-    let thanksForSubmitPage: ThanksForSubmitPage;
-    test.beforeEach(async ({page}) => {
-        practiceFormPage = new PracticeFormPage(page);
-        thanksForSubmitPage = new ThanksForSubmitPage(page);
-        await practiceFormPage.goTo();
+import { expect, test } from "@playwright/test";
+import { PracticeFormPage } from "../pages/PracticeFormPage.js";
+import { ThanksForSubmitPage } from "../pages/ThanksForSubmitPage.js";
+import { readDataFromCSV } from "../common/Utils.js";
+
+const testData = readDataFromCSV("testcase/data/PracticeForm_TC1.csv");
+
+test.describe("Practice Form Test", () => {
+  for (const data of testData) {
+    test(`Submit data successfully`, async ({ page }) => {
+      const practiceFormPage = new PracticeFormPage(page);
+      const thanksForSubmitPage = new ThanksForSubmitPage(page);
+
+      await practiceFormPage.goTo();
+
+      await practiceFormPage.inputData(
+        data.firstName ?? "",
+        data.lastName ?? "",
+        data.email ?? "",
+        data.gender ?? "",
+        data.mobile ?? "",
+        data.dateOfBirth ?? "",
+        data.subject ?? "",
+        data.hobbies ?? "",
+        data.picture ?? "",
+        data.currentAddress ?? "",
+        data.state ?? "",
+        data.city ?? "",
+      );
+
+      expect(
+        await thanksForSubmitPage.getValueByLabel(
+          thanksForSubmitPage.lblValue,
+          "Student Name",
+        ),
+      ).toBe(`${data.firstName} ${data.lastName}`);
+
+      expect(
+        await thanksForSubmitPage.getValueByLabel(
+          thanksForSubmitPage.lblValue,
+          "Student Email",
+        ),
+      ).toBe(data.email);
+
+      expect(
+        await thanksForSubmitPage.getValueByLabel(
+          thanksForSubmitPage.lblValue,
+          "Gender",
+        ),
+      ).toBe(data.gender);
+
+      expect(
+        await thanksForSubmitPage.getValueByLabel(
+          thanksForSubmitPage.lblValue,
+          "Mobile",
+        ),
+      ).toBe(data.mobile);
+
+      const expectedDOB = data.dateOfBirth
+        ? (() => {
+            const [day, month, year] = data.dateOfBirth.split(" ");
+            return `${day} ${month},${year}`;
+          })()
+        : "";
+
+      expect(
+        await thanksForSubmitPage.getValueByLabel(
+          thanksForSubmitPage.lblValue,
+          "Date of Birth",
+        ),
+      ).toBe(expectedDOB);
+
+      expect(
+        await thanksForSubmitPage.getValueByLabel(
+          thanksForSubmitPage.lblValue,
+          "Subjects",
+        ),
+      ).toBe(data.subject);
+
+      expect(
+        await thanksForSubmitPage.getValueByLabel(
+          thanksForSubmitPage.lblValue,
+          "Hobbies",
+        ),
+      ).toBe(data.hobbies);
+
+      expect(
+        await thanksForSubmitPage.getValueByLabel(
+          thanksForSubmitPage.lblValue,
+          "Picture",
+        ),
+      ).toBe(data.picture);
+
+      expect(
+        await thanksForSubmitPage.getValueByLabel(
+          thanksForSubmitPage.lblValue,
+          "Address",
+        ),
+      ).toBe(data.currentAddress);
+
+      expect(
+        await thanksForSubmitPage.getValueByLabel(
+          thanksForSubmitPage.lblValue,
+          "State and City",
+        ),
+      ).toBe(`${data.state} ${data.city}`);
     });
-
-    test('Submit data successfully', async () => {
-        const firstName: string = 'Thu';
-        const lastName: string = 'Hà';
-        const email: string = 'thuha@gmail.com';   
-        const gender: string = 'Male';
-        const mobile: string = '0123456789';
-        const dateOfBirth: string = '01 January,2000';
-        const subject: string = 'Maths, Physics, Chemistry';
-        const hobbies: string = 'Sports, Reading, Music';
-        const picture: string = 'image_sample.jpg';
-        const currentAddress: string = '123 Main St';
-        const state: string = 'NCR';
-        const city: string = 'Delhi';
-        await practiceFormPage.inputData(firstName, lastName, email, gender, mobile, dateOfBirth, subject, hobbies, picture, currentAddress, state, city);
-        const actualStudentName: string = await thanksForSubmitPage.getValueByLabel(thanksForSubmitPage.lblValue, 'Student Name');
-        const expectedStudentName: string = firstName + ' ' + lastName;
-        expect(actualStudentName).toBe(expectedStudentName);
-        
-        const actualStudentEmail: string = await thanksForSubmitPage.getValueByLabel(thanksForSubmitPage.lblValue, 'Student Email');
-        expect(actualStudentEmail).toBe(email);
-
-        const actualGender: string = await thanksForSubmitPage.getValueByLabel(thanksForSubmitPage.lblValue, 'Gender');
-        expect(actualGender).toBe(gender);
-
-        const actualMobile: string = await thanksForSubmitPage.getValueByLabel(thanksForSubmitPage.lblValue, 'Mobile');
-        expect(actualMobile).toBe(mobile);
-
-        const actualDateOfBirth: string = await thanksForSubmitPage.getValueByLabel(thanksForSubmitPage.lblValue, 'Date of Birth');
-        const firstSpace = dateOfBirth.indexOf(" ");
-        const secondSpace = dateOfBirth.indexOf(" ", firstSpace + 1);
-        const expectedDateOfBirth = dateOfBirth.replace(dateOfBirth[secondSpace], ",");
-        expect(actualDateOfBirth).toBe(expectedDateOfBirth);
-
-        const actualSubjects: string = await thanksForSubmitPage.getValueByLabel(thanksForSubmitPage.lblValue, 'Subjects');
-        expect(actualSubjects).toBe(subject);
-
-        const actualHobbies: string = await thanksForSubmitPage.getValueByLabel(thanksForSubmitPage.lblValue, 'Hobbies');
-        expect(actualHobbies).toBe(hobbies);
-
-        const actualPicture: string = await thanksForSubmitPage.getValueByLabel(thanksForSubmitPage.lblValue, 'Picture');
-        expect(actualPicture).toBe(picture);
-
-        const actualAddress: string = await thanksForSubmitPage.getValueByLabel(thanksForSubmitPage.lblValue, 'Address');
-        expect(actualAddress).toBe(currentAddress);
-
-        const actualStateAndCity: string = await thanksForSubmitPage.getValueByLabel(thanksForSubmitPage.lblValue, 'State and City');
-        const expectedStateAndCity: string = state + ' ' + city;
-        expect(actualStateAndCity).toBe(expectedStateAndCity);  
-
-
-    });
+  }
 });
