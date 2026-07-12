@@ -1,8 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { TextBoxPage } from '../pages/TextBoxPage.js';
-
 test.describe('TextBox Tests', () => {
-let textBoxPage: TextBoxPage;
+let textBoxPage:TextBoxPage;
 
 test.beforeEach(async ({ page }) => {
     textBoxPage = new TextBoxPage(page);

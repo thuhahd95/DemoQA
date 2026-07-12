@@ -17,6 +17,7 @@
     "allure-playwright": "^3.9.0"
   },
   "dependencies": {
+    "csv-parse": "^7.0.1",
     "save-dev": "^0.0.1-security"
   }
 }
