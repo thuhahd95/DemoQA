@@ -10,9 +10,7 @@ test.describe("Practice Form Test", () => {
     test(`Submit data successfully`, async ({ page }) => {
       const practiceFormPage = new PracticeFormPage(page);
       const thanksForSubmitPage = new ThanksForSubmitPage(page);
-
       await practiceFormPage.goTo();
-
       await practiceFormPage.inputData(
         data.firstName ?? "",
         data.lastName ?? "",
