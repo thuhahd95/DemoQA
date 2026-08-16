@@ -13,6 +13,7 @@ export class WebTablesPage {
   readonly txtDepartment: Locator;
   readonly btnSubmit: Locator;
   readonly btnDeletes: Locator;
+  readonly btnEdits: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -26,6 +27,7 @@ export class WebTablesPage {
     this.txtDepartment = page.locator("#department");
     this.btnSubmit = page.locator("#submit");
     this.btnDeletes = page.locator("xpath=//span[@title='Delete']/svg");
+    this.btnEdits = page.locator("xpath=//span[@title='Edit']/svg");
   }
 
   async search(keyword: string) {
@@ -93,5 +95,41 @@ export class WebTablesPage {
         await this.btnDeletes.first().click();
       }
     }
+  }
+  //Edit user
+  async editUser(
+    keyword: string,
+    firstName: string,
+    lastName: string,
+    age: number,
+    email: string,
+    salary: number,
+    department: string,
+  ) {
+    await this.search(keyword);
+
+    await expect(this.btnEdits.first()).toBeVisible();
+
+    await this.btnEdits.first().click();
+
+    await this.txtFirstName.clear();
+    await this.txtFirstName.fill(firstName);
+
+    await this.txtLastName.clear();
+    await this.txtLastName.fill(lastName);
+
+    await this.txtAge.clear();
+    await this.txtAge.fill(age.toString());
+
+    await this.txtEmail.clear();
+    await this.txtEmail.fill(email);
+
+    await this.txtSalary.clear();
+    await this.txtSalary.fill(salary.toString());
+
+    await this.txtDepartment.clear();
+    await this.txtDepartment.fill(department);
+
+    await this.btnSubmit.click();
   }
 }

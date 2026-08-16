@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 /**
  * Read environment variables from file.
@@ -12,7 +12,7 @@ import { defineConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -22,24 +22,26 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   ...(process.env.CI ? { workers: 1 } : {}),
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['html',{ outputFolder: 'reports/html-report' }],
-['allure-playwright', { outputFolder: 'reports/allure-results' }]],
+  reporter: [
+    ["html", { outputFolder: "reports/html-report" }],
+    ["allure-playwright", { outputFolder: "reports/allure-results" }],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: 'https://demoqa.com',
+    baseURL: "https://demoqa.com",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    trace: "on-first-retry",
+    screenshot: "only-on-failure",
     // video: 'retain-on-failure',
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
 
     // {
